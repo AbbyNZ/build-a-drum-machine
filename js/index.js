@@ -50,66 +50,87 @@ const inactiveDrum = {
   backgroundColor: 'grey',
   marginTop: 20,
   boxShadow: "2px 2px 5px black"
+};
+
+const updateId = (id) => {
+  return id.replace(/-/g, ' ');
+}
+
+const Drumpad = (props) => {
+  return (
+    <div>
+      <div className="drum-pad">Q</div>
+      <div className="drum-pad">W</div>
+      <div className="drum-pad">E</div>
+      <div className="drum-pad">A</div>
+      <div className="drum-pad">S</div>
+      <div className="drum-pad">D</div>
+      <div className="drum-pad">Z</div>
+      <div className="drum-pad">X</div>
+      <div className="drum-pad">C</div>
+    </div>
+  );
 }
 
 class DrumMachine extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      drum: inactiveDrum
+      drum: inactiveDrum,
+      display: "Drum Machine"
     }
     
-    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.playDrum = this.playDrum.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.activatePad = this.activatePad.bind(this);
   }
   
   componentDidMount() {
-    document.addEventListener('keydown',this.handleKeyPress);
+  document.addEventListener('keydown',this.handleKeyPress);
   }
   
   componentWillMount() {
     document.removeEventListener('keydown', this.handleKeyPress);
   }
   
-  handleKeyPress(event) {
-    if(event.keyCode === this.props.keyCode) {
+  handleKeyPress(e) {
+    if(e.keyCode === this.props.keyCode) {
       this.playDrum();
+      console.log("working");
     }
+    this.setState({
+      currentPad: e.target.id
+    });
+    
   }
   
   activatePad() {
     
   }
   
-  playDrum(event) {
+  playDrum(e) {
     const audio = document.getElementById(this.props.keyTrigger);
     audio.currentTime = 0;
     audio.play();
-    this.activatePad();
-    setTimeout(() => this.activatePad(), 100);
+    this.setState({
+      display: keypad[value].id
+    });
   }
   
   render() {
     return (
-      <div>
+      <div >
         <div id="drum-machine">
-        <div id="display">
-          <div className="drum-pad-panel">
-            <div className="drum-pad">Q</div>
-            <div className="drum-pad">W</div>
-            <div className="drum-pad">E</div>
-            <div className="drum-pad">A</div>
-            <div className="drum-pad">S</div>
-            <div className="drum-pad">D</div>
-            <div className="drum-pad">Z</div>
-            <div className="drum-pad">X</div>
-            <div className="drum-pad">C</div>
+          <div className="drum-pad-panel" id={this.props.clipId} onClick={this.playSound}>
+            <Drumpad/>  
+            </div>
+            <div className="controls">
+              <div id="display">
+                {this.state.display}
+              </div>
+            </div>
           </div>
-          <div className="controls"></div>
-        </div>
-      </div>
-      </div>
+     </div> 
     );
   }
 };
