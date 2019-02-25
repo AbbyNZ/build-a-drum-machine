@@ -1,4 +1,25 @@
-const drumData = [{
+const Button = ({button, playDrum}) => {
+  return (
+    <button type="button" className="drum-pad" onClick={() => playDrum(event, button.keyTrigger)} id={button.id}>{button.keyTrigger}<audio src={button.url} className="clip" id={button.keyTrigger} />      
+    </button>
+  );
+};
+
+const Drumpad = ({buttons, playDrum}) => {
+  const PadElements = buttons.map((button, index) => {
+    return <Button keyTrigger={index} button={button} playDrum={playDrum} />; 
+  });
+  
+  return (
+    <div className="drumpad">{PadElements}</div>
+  )
+}
+
+class DrumMachine extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      drumData:  [{
     keyCode: 81,
     keyTrigger: 'Q',
     id: 'Heater-1',
@@ -44,85 +65,40 @@ const drumData = [{
     id: 'Closed-HH',
     url: 'https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3'
   },
-];
+],
 
-const inactiveDrum = {
-  backgroundColor: 'grey',
-  marginTop: 20,
-  boxShadow: "2px 2px 5px black"
-};
-
-const updateId = (id) => {
-  return id.replace(/-/g, ' ');
-}
-
-const Drumpad = (props) => {
-  return (
-    <div>
-      <div className="drum-pad">Q</div>
-      <div className="drum-pad">W</div>
-      <div className="drum-pad">E</div>
-      <div className="drum-pad">A</div>
-      <div className="drum-pad">S</div>
-      <div className="drum-pad">D</div>
-      <div className="drum-pad">Z</div>
-      <div className="drum-pad">X</div>
-      <div className="drum-pad">C</div>
-    </div>
-  );
-}
-
-class DrumMachine extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      drum: inactiveDrum,
-      display: "Drum Machine"
-    }
+      display: ""
+    };
     
     this.playDrum = this.playDrum.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.activatePad = this.activatePad.bind(this);
+    /*this.handleKeyPress = this.handleKeyPress.bind(this);*/
   }
   
   componentDidMount() {
-  document.addEventListener('keydown',this.handleKeyPress);
-  }
-  
-  componentWillMount() {
-    document.removeEventListener('keydown', this.handleKeyPress);
-  }
-  
-  handleKeyPress(e) {
-    if(e.keyCode === this.props.keyCode) {
-      this.playDrum();
-      console.log("working");
-    }
-    this.setState({
-      currentPad: e.target.id
-    });
-    
-  }
-  
-  activatePad() {
-    
-  }
-  
-  playDrum(e) {
-    const audio = document.getElementById(this.props.keyTrigger);
-    audio.currentTime = 0;
-    audio.play();
-    this.setState({
-      display: keypad[value].id
+    window.addEventListener('keydown', (event) => {
+      this.playDrum(event);
     });
   }
+   
+ playDrum(event, keyTrigger) {
+   return this.state.drumData.map((audio) => {
+     if(keyTrigger === audio.keyTrigger || event.keyCode === audio.keyCode) {
+       document.getElementById(audio.keyTrigger).currentTime = 0;
+       document.getElementById(audio.keyTrigger).play();
+       this.setState({
+         display: audio.id
+       });
+     }
+   });
+ }
   
   render() {
     return (
       <div >
         <div id="drum-machine">
-          <div className="drum-pad-panel" id={this.props.clipId} onClick={this.playSound}>
-            <Drumpad/>  
+          <div className="drum-pad-panel">
+            <Drumpad buttons={this.state.drumData} playDrum={this.playDrum}>
+            </Drumpad>  
             </div>
             <div className="controls">
               <div id="display">
