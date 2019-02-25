@@ -1,12 +1,18 @@
-/*$padWidth: 100px;
-$padHeight: 80px;*/
-
 body {
   font-family: Georgia, serif;
   background: #bcd0e5;
+  
+}
+
+#app {
   justify-content: center;
   align-items: center;
   display: flex;
+  height: 100vh;
+}
+
+.title {
+  text-align: center;
 }
 
 #drum-machine {
@@ -15,44 +21,48 @@ body {
   position: relative;
   text-align: center;
   background-color: #ffffff;
-  height:100vh;
-}
-
-#display {
-  width: 660px;
-  height: 80vh;
-  top: 15px;
-  left: 20px;
-  background-color: gray;
-  text-align: center;
-  position: relative;
-  outline: 3px solid red;
 }
 
 .drum-pad-panel {
-  width: calc((100px*3) + 50px);
-  height: calc((80px*3) + 50px);
+  width: calc((70px*3) + 50px);
+  height: calc((70px*3) + 50px);
   display: inline-block;
-  margin: 20px;
+  margin-top: 40px;
   outline: 1px solid;
 }
 
 .drum-pad {
-  width: 100px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   margin: 8px;
-  border-radius: 5px;
-  padding-top: 30px;
-  outline: 5px solid orange;
+  border-radius: 10px;
+  padding-top: 10px;
   float: left;
   position: relative;
   box-sizing: border-box;
   cursor: pointer;
 }
 
+.drum-pad:hover {
+  outline: 5px solid orange; 
+} 
+
 .controls {
-  width: 240px;
-  height: 250px;
+  width: 250px;
+  height: 300px;
+  margin: 40px 20px 0 60px;
   display: inline-block;
-  outline: 3px solid;
+  vertical-align: top;
+}
+
+#display {
+  width: 200px;
+  height: 50px;
+  margin: 25px auto;
+  padding-top: 15px;
+  background-color: gray;
+  box-sizing: border-box; 
+  outline: 2px solid dimgrey;
+  color: #ffffff;
+  display: inline-block;
 }
